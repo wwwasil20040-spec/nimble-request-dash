@@ -40,6 +40,13 @@ export const Route = createRootRoute({
         content: "خدمات بحثية وأكاديمية متكاملة لطلاب البكالوريوس والماجستير والدكتوراه.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "الأصيل لخدمات البحوث والمشاريع العلمية" },
+      { name: "description", content: "Order Flow Navigator is a web application for administrators to manage service requests." },
+      { property: "og:description", content: "Order Flow Navigator is a web application for administrators to manage service requests." },
+      { name: "twitter:description", content: "Order Flow Navigator is a web application for administrators to manage service requests." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/20855644-638c-4540-a54b-32b58cb1128c/id-preview-9cbbc5b1--efcc2920-72b8-4ae4-b679-d48ad09e53c9.lovable.app-1776791289648.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/20855644-638c-4540-a54b-32b58cb1128c/id-preview-9cbbc5b1--efcc2920-72b8-4ae4-b679-d48ad09e53c9.lovable.app-1776791289648.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

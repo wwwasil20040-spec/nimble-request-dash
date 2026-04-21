@@ -140,14 +140,14 @@ function AdminPage() {
   }
 
   async function updateStatus(id: string, status: string) {
-    const patch: Record<string, unknown> = { status };
-    if (status === "received") {
-      patch.received_by = session?.user.id ?? null;
-      patch.received_by_email = session?.user.email ?? null;
-    } else {
-      patch.received_by = null;
-      patch.received_by_email = null;
-    }
+    const patch =
+      status === "received"
+        ? {
+            status,
+            received_by: session?.user.id ?? null,
+            received_by_email: session?.user.email ?? null,
+          }
+        : { status, received_by: null, received_by_email: null };
     const { error } = await supabase.from("service_requests").update(patch).eq("id", id);
     if (error) {
       toast.error("تعذر تحديث الحالة");

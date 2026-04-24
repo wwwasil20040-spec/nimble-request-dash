@@ -14,6 +14,82 @@ export type Database = {
   }
   public: {
     Tables: {
+      request_activity_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          from_value: string | null
+          id: string
+          request_id: string
+          to_value: string | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          from_value?: string | null
+          id?: string
+          request_id: string
+          to_value?: string | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          from_value?: string | null
+          id?: string
+          request_id?: string
+          to_value?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_activity_log_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_notes: {
+        Row: {
+          author_email: string
+          author_id: string
+          created_at: string
+          id: string
+          note: string
+          request_id: string
+        }
+        Insert: {
+          author_email: string
+          author_id: string
+          created_at?: string
+          id?: string
+          note: string
+          request_id: string
+        }
+        Update: {
+          author_email?: string
+          author_id?: string
+          created_at?: string
+          id?: string
+          note?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_notes_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_requests: {
         Row: {
           created_at: string

@@ -51,15 +51,19 @@ export function RequestForm() {
         file_name = file.name;
       }
 
-      const { error } = await supabase.from("service_requests").insert({
-        full_name,
-        phone,
-        service_type,
-        details,
-        file_name,
-        file_path,
-        status: "new",
-      });
+      const { data: inserted, error } = await supabase
+        .from("service_requests")
+        .insert({
+          full_name,
+          phone,
+          service_type,
+          details,
+          file_name,
+          file_path,
+          status: "new",
+        } as never)
+        .select("tracking_code")
+        .single();
 
       if (error) {
         console.error("insert error", error);

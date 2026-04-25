@@ -103,6 +103,7 @@ export type Database = {
           received_by_email: string | null
           service_type: string | null
           status: string
+          tracking_code: string
           updated_at: string
         }
         Insert: {
@@ -117,6 +118,7 @@ export type Database = {
           received_by_email?: string | null
           service_type?: string | null
           status?: string
+          tracking_code: string
           updated_at?: string
         }
         Update: {
@@ -131,6 +133,7 @@ export type Database = {
           received_by_email?: string | null
           service_type?: string | null
           status?: string
+          tracking_code?: string
           updated_at?: string
         }
         Relationships: []
@@ -161,12 +164,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_tracking_code: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      track_request: {
+        Args: { _code: string; _phone: string }
+        Returns: {
+          created_at: string
+          full_name: string
+          service_type: string
+          status: string
+          tracking_code: string
+          updated_at: string
+        }[]
       }
     }
     Enums: {

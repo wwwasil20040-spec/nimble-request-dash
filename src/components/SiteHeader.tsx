@@ -7,6 +7,7 @@ const NAV = [
   { to: "/services", label: "الخدمات" },
   { to: "/pricing", label: "الأسعار" },
   { to: "/portfolio", label: "أعمالنا" },
+  { to: "/track", label: "تتبع طلب" },
   { to: "/faq", label: "الأسئلة الشائعة" },
   { to: "/contact", label: "تواصل" },
 ] as const;

@@ -1,0 +1,16 @@
+[build]
+  command = "bun install && bun run build"
+  publish = "dist/client"
+
+# TanStack Start يولد Worker مخصص لـ Cloudflare.
+# للنشر على Netlify بشكل صحيح، يُنصح بإحدى الطرق التالية:
+# 1. ربط المستودع بـ Cloudflare Pages بدلاً من Netlify (أبسط).
+# 2. أو استخدام Netlify Edge Functions مع محوّل مخصص.
+#
+# الإعداد أدناه يخدم الواجهة كـ SPA fallback — صفحات معينة قد لا تعمل بشكل مثالي
+# بدون SSR (مشاركة الروابط، SEO المتقدم).
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

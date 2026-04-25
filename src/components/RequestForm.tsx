@@ -72,7 +72,12 @@ export function RequestForm() {
         return;
       }
 
-      toast.success("تم إرسال طلبك بنجاح! سنتواصل معك قريباً.");
+      const code = inserted?.tracking_code;
+      toast.success(
+        code
+          ? `تم إرسال طلبك! رقم التتبع: ${code} — احتفظ به لمتابعة الحالة`
+          : "تم إرسال طلبك بنجاح! سنتواصل معك قريباً."
+      );
       formRef.current?.reset();
       setFileName("");
     } catch (err) {

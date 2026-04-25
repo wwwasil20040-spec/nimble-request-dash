@@ -110,6 +110,9 @@ function TrackPage() {
               placeholder="مثل ABC-1234"
               className="w-full px-3 py-2.5 border border-input rounded-md bg-secondary/30 focus:outline-none focus:border-[var(--primary-2)] uppercase"
             />
+            <p className="text-xs text-muted-foreground mt-1">
+              صيغة الرمز: 3 أحرف ثم 4 أرقام (مثال: FYR-7265). الترتيب المعكوس مقبول أيضاً.
+            </p>
           </div>
           <div className="mb-4">
             <label className="block font-semibold mb-2 text-sm">رقم الجوال *</label>

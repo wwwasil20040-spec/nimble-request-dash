@@ -41,25 +41,52 @@ function TrackPage() {
     setLoading(true);
     setSearched(false);
     const fd = new FormData(e.currentTarget);
-    const code = String(fd.get("code") || "").trim();
+    let code = String(fd.get("code") || "").trim().toUpperCase();
     const phone = String(fd.get("phone") || "").trim();
     if (!code || !phone) {
       toast.error("الرجاء إدخال رمز التتبع ورقم الجوال");
       setLoading(false);
       return;
     }
-    const { data, error } = await supabase.rpc("track_request", {
-      _code: code,
-      _phone: phone,
-    });
+    // Normalize: accept "ABC-1234", "ABC1234", or reversed "1234-ABC"
+    const cleaned = code.replace(/[^A-Z0-9]/g, "");
+    const candidates = new Set<string>();
+    candidates.add(code);
+    if (/^[A-Z]{3}\d{4}$/.test(cleaned)) {
+      candidates.add(`${cleaned.slice(0, 3)}-${cleaned.slice(3)}`);
+    }
+    if (/^\d{4}[A-Z]{3}$/.test(cleaned)) {
+      candidates.add(`${cleaned.slice(4)}-${cleaned.slice(0, 4)}`);
+    }
+    if (/^\d{4}-[A-Z]{3}$/.test(code)) {
+      const [d, l] = code.split("-");
+      candidates.add(`${l}-${d}`);
+    }
+
+    let found: Result | null = null;
+    let lastError: unknown = null;
+    for (const c of candidates) {
+      const { data, error } = await supabase.rpc("track_request", {
+        _code: c,
+        _phone: phone,
+      });
+      if (error) {
+        lastError = error;
+        continue;
+      }
+      if (data && data[0]) {
+        found = data[0] as Result;
+        break;
+      }
+    }
     setLoading(false);
     setSearched(true);
-    if (error) {
-      console.error(error);
+    if (!found && lastError) {
+      console.error(lastError);
       toast.error("تعذر البحث، حاول لاحقاً");
       return;
     }
-    setResult((data && data[0]) || null);
+    setResult(found);
   }
 
   return (

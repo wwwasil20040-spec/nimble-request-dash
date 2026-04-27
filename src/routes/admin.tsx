@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Session } from "@supabase/supabase-js";
+import { PortfolioManager } from "@/components/PortfolioManager";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -488,6 +489,9 @@ VALUES ('${session.user.id}', 'admin');`}
             </div>
           </div>
         </section>
+
+        {/* Portfolio manager */}
+        <PortfolioManager userId={session.user.id} userEmail={session.user.email ?? ""} />
 
         {/* Requests list */}
         {loading && <p className="text-center text-muted-foreground py-8">جاري التحميل...</p>}

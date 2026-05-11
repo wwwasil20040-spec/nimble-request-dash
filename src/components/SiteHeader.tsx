@@ -6,8 +6,7 @@ const NAV = [
   { to: "/", label: "الرئيسية" },
   { to: "/services", label: "الخدمات" },
   { to: "/pricing", label: "الأسعار" },
-  { to: "/portfolio", label: "أعمالنا" },
-  { to: "/track", label: "تتبع طلب" },
+  { to: "/image-to-pdf", label: "تحويل صور إلى PDF" },
   { to: "/faq", label: "الأسئلة الشائعة" },
   { to: "/contact", label: "تواصل" },
 ] as const;
@@ -36,21 +35,13 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <div className="flex items-center gap-2">
-          <Link
-            to="/admin"
-            className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-border text-primary font-bold text-sm hover:bg-secondary transition"
-          >
-            🔐 المشرفون
-          </Link>
-          <button
-            onClick={() => setOpen((v) => !v)}
-            className="md:hidden text-2xl text-primary"
-            aria-label="القائمة"
-          >
-            ☰
-          </button>
-        </div>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          className="md:hidden text-2xl text-primary"
+          aria-label="القائمة"
+        >
+          ☰
+        </button>
       </div>
       {open && (
         <div className="md:hidden border-t border-border bg-background">
@@ -62,11 +53,6 @@ export function SiteHeader() {
                 </Link>
               </li>
             ))}
-            <li>
-              <Link to="/admin" onClick={() => setOpen(false)} className="font-semibold w-full text-right block">
-                🔐 لوحة المشرفين
-              </Link>
-            </li>
           </ul>
         </div>
       )}
@@ -85,7 +71,7 @@ export function SiteFooter() {
         <div className="flex justify-center gap-4 text-sm text-muted-foreground mb-2 flex-wrap">
           <Link to="/services" className="hover:text-foreground">الخدمات</Link>
           <Link to="/pricing" className="hover:text-foreground">الأسعار</Link>
-          <Link to="/portfolio" className="hover:text-foreground">أعمالنا</Link>
+          <Link to="/image-to-pdf" className="hover:text-foreground">تحويل صور إلى PDF</Link>
           <Link to="/faq" className="hover:text-foreground">الأسئلة الشائعة</Link>
           <Link to="/contact" className="hover:text-foreground">تواصل</Link>
         </div>

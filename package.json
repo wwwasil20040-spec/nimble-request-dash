@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "postbuild": "node scripts/fix-cloudflare-pages-config.mjs"
+    "deploy": "wrangler deploy --config dist/server/wrangler.json"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",

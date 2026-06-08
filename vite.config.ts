@@ -5,12 +5,29 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { existsSync } from "node:fs";
-import { copyFile, mkdir, readFile, stat } from "node:fs/promises";
+import { copyFile, mkdir, readdir, readFile, stat } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 function ensureWranglerDeployEntry() {
   const expectedEntry = join("dist", "server", "index.mjs");
+  const knownEntries = ["server.js", "server.mjs", "index.js"];
+
+  async function getGeneratedEntry() {
+    const generatedWranglerPath = join("dist", "server", "wrangler.json");
+    if (existsSync(generatedWranglerPath)) {
+      const generatedWranglerConfig = JSON.parse(await readFile(generatedWranglerPath, "utf8")) as { main?: string };
+      const configuredEntry = join("dist", "server", generatedWranglerConfig.main ?? "");
+      if (existsSync(configuredEntry)) return configuredEntry;
+    }
+
+    const serverDir = join("dist", "server");
+    const serverFiles = existsSync(serverDir) ? await readdir(serverDir) : [];
+    const knownEntry = knownEntries.map((file) => join(serverDir, file)).find((file) => existsSync(file));
+    if (knownEntry) return knownEntry;
+
+    return serverFiles.map((file) => join(serverDir, file)).find((file) => file.endsWith(".mjs") || file.endsWith(".js"));
+  }
 
   return {
     name: "ensure-wrangler-deploy-entry",
@@ -18,12 +35,9 @@ function ensureWranglerDeployEntry() {
     async closeBundle() {
       if (existsSync(expectedEntry)) return;
 
-      const generatedWranglerConfig = JSON.parse(await readFile(join("dist", "server", "wrangler.json"), "utf8")) as {
-        main?: string;
-      };
-      const fallbackEntry = join("dist", "server", generatedWranglerConfig.main ?? "");
+      const fallbackEntry = await getGeneratedEntry();
 
-      if (!existsSync(fallbackEntry)) {
+      if (!fallbackEntry || !existsSync(fallbackEntry)) {
         throw new Error(`Deployment entry not found. Expected ${expectedEntry}.`);
       }
 

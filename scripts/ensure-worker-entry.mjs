@@ -26,7 +26,7 @@ async function getGeneratedEntry() {
 
 const fallbackEntry = await getGeneratedEntry();
 
-if (!existsSync(fallbackEntry)) {
+if (!fallbackEntry || !existsSync(fallbackEntry)) {
   throw new Error(`Deployment entry not found. Expected ${expectedEntry}.`);
 }
 

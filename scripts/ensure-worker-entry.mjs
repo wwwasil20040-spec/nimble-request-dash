@@ -21,7 +21,7 @@ async function getGeneratedEntry() {
   const knownEntry = knownEntries.map((file) => join("dist", "server", file)).find((file) => existsSync(file));
   if (knownEntry) return knownEntry;
 
-  return serverFiles.map((file) => join("dist", "server", file)).find((file) => file.endsWith(".mjs") || file.endsWith(".js"));
+  return undefined;
 }
 
 const fallbackEntry = await getGeneratedEntry();

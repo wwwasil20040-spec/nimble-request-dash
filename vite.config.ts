@@ -26,7 +26,7 @@ function ensureWranglerDeployEntry() {
     const knownEntry = knownEntries.map((file) => join(serverDir, file)).find((file) => existsSync(file));
     if (knownEntry) return knownEntry;
 
-    return serverFiles.map((file) => join(serverDir, file)).find((file) => file.endsWith(".mjs") || file.endsWith(".js"));
+    return undefined;
   }
 
   return {

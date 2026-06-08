@@ -5,29 +5,12 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { existsSync } from "node:fs";
-import { copyFile, mkdir, readdir, stat } from "node:fs/promises";
+import { copyFile, mkdir, readFile, stat } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 function ensureWranglerDeployEntry() {
   const expectedEntry = join("dist", "server", "index.mjs");
-  const fallbackNames = ["server.js", "server.mjs", "index.js"];
-
-  async function walk(directory: string): Promise<string[]> {
-    const entries = await readdir(directory, { withFileTypes: true });
-    const files: string[] = [];
-
-    for (const entry of entries) {
-      const path = join(directory, entry.name);
-      if (entry.isDirectory()) {
-        files.push(...(await walk(path)));
-      } else {
-        files.push(path);
-      }
-    }
-
-    return files;
-  }
 
   return {
     name: "ensure-wrangler-deploy-entry",
@@ -35,10 +18,12 @@ function ensureWranglerDeployEntry() {
     async closeBundle() {
       if (existsSync(expectedEntry)) return;
 
-      const distFiles = existsSync("dist") ? await walk("dist") : [];
-      const fallbackEntry = distFiles.find((file) => fallbackNames.some((name) => file.endsWith(name)));
+      const generatedWranglerConfig = JSON.parse(await readFile(join("dist", "server", "wrangler.json"), "utf8")) as {
+        main?: string;
+      };
+      const fallbackEntry = join("dist", "server", generatedWranglerConfig.main ?? "");
 
-      if (!fallbackEntry) {
+      if (!existsSync(fallbackEntry)) {
         throw new Error(`Deployment entry not found. Expected ${expectedEntry}.`);
       }
 

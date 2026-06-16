@@ -7,13 +7,5 @@
   "assets": {
     "binding": "ASSETS",
     "directory": "dist/client"
-  },
-  "no_bundle": true,
-  "find_additional_modules": true,
-  "rules": [
-    {
-      "type": "ESModule",
-      "globs": ["**/*.mjs", "**/*.js"]
-    }
-  ]
+  }
 }

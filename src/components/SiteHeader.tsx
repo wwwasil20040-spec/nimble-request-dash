@@ -5,6 +5,7 @@ import { SITE } from "@/lib/site-config";
 const NAV = [
   { to: "/", label: "الرئيسية" },
   { to: "/services", label: "الخدمات" },
+  { to: "/products", label: "المنتجات" },
   { to: "/pricing", label: "الأسعار" },
   { to: "/image-to-pdf", label: "تحويل صور إلى PDF" },
   { to: "/faq", label: "الأسئلة الشائعة" },

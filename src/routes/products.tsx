@@ -20,11 +20,15 @@ export const Route = createFileRoute("/products")({
   component: ProductsPage,
 });
 
+const CUSTOMER_KEY = "aseel_customer_v1";
+
 function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const cart = useCart();
   const [open, setOpen] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
 
   useEffect(() => {
     supabase
@@ -38,14 +42,37 @@ function ProductsPage() {
         setProducts((data as Product[]) || []);
         setLoading(false);
       });
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(CUSTOMER_KEY) || "{}");
+      if (saved.name) setCustomerName(saved.name);
+      if (saved.phone) setCustomerPhone(saved.phone);
+    } catch {}
   }, []);
 
   function sendOrder() {
     if (cart.items.length === 0) return;
+    const name = customerName.trim();
+    const phone = customerPhone.trim();
+    if (name.length < 2) {
+      toast.error("الرجاء إدخال الاسم");
+      return;
+    }
+    if (!/^[+\d][\d\s-]{6,}$/.test(phone)) {
+      toast.error("الرجاء إدخال رقم هاتف صحيح");
+      return;
+    }
+    localStorage.setItem(CUSTOMER_KEY, JSON.stringify({ name, phone }));
+
     const lines = cart.items.map(
       (i, n) => `${n + 1}- ${i.product.name} × ${i.qty} = ${(i.qty * Number(i.product.price)).toFixed(2)}`,
     );
-    const msg = `طلب جديد من الموقع:\n\n${lines.join("\n")}\n\nالإجمالي: ${cart.total.toFixed(2)}`;
+    const msg =
+      `طلب جديد من الموقع:\n\n` +
+      `👤 الاسم: ${name}\n` +
+      `📱 الهاتف: ${phone}\n\n` +
+      `🛒 الطلب:\n${lines.join("\n")}\n\n` +
+      `الإجمالي: ${cart.total.toFixed(2)}`;
     window.open(`${SITE.whatsappUrl}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 
@@ -108,7 +135,6 @@ function ProductsPage() {
         </div>
       </section>
 
-      {/* Floating cart button */}
       {cart.count > 0 && (
         <button
           onClick={() => setOpen(true)}
@@ -118,7 +144,6 @@ function ProductsPage() {
         </button>
       )}
 
-      {/* Cart drawer */}
       {open && (
         <div className="fixed inset-0 z-50 flex" dir="rtl">
           <div className="flex-1 bg-black/50" onClick={() => setOpen(false)} />
@@ -172,12 +197,38 @@ function ProductsPage() {
                     </div>
                   ))}
                 </div>
+
                 <div className="border-t border-border pt-4 mb-4">
-                  <div className="flex justify-between font-extrabold text-lg">
+                  <div className="flex justify-between font-extrabold text-lg mb-4">
                     <span>الإجمالي:</span>
                     <span className="text-[var(--primary-2)]">{cart.total.toFixed(2)}</span>
                   </div>
+
+                  <div className="space-y-3 mb-4">
+                    <h3 className="font-bold text-sm">بيانات العميل</h3>
+                    <label className="block">
+                      <span className="block text-xs font-semibold mb-1">الاسم *</span>
+                      <input
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        placeholder="الاسم الكامل"
+                        className="w-full px-3 py-2 rounded-lg border border-border bg-background"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="block text-xs font-semibold mb-1">رقم الهاتف *</span>
+                      <input
+                        type="tel"
+                        value={customerPhone}
+                        onChange={(e) => setCustomerPhone(e.target.value)}
+                        placeholder="07XXXXXXXX"
+                        dir="ltr"
+                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-right"
+                      />
+                    </label>
+                  </div>
                 </div>
+
                 <button
                   onClick={sendOrder}
                   className="w-full px-4 py-3 rounded-lg font-bold text-white bg-[#25d366] mb-2"

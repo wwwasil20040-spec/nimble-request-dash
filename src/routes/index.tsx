@@ -3,6 +3,7 @@ import { SERVICES } from "@/lib/services-data";
 import { SITE } from "@/lib/site-config";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { ReviewsSection } from "@/components/ReviewsSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -142,6 +143,8 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      <ReviewsSection />
 
       {/* CTA */}
       <section className="py-12 px-5">

@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { fileToCompressedDataUrl } from "@/lib/image-utils";
 
 type Row = {
   id: string;
@@ -162,13 +163,34 @@ function AdminProducts() {
               className="inp"
             />
           </Field>
-          <Field label="رابط الصورة">
+          <Field label="صورة المنتج" className="md:col-span-2">
             <input
-              value={form.image_url}
-              onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-              placeholder="https://..."
-              className="inp"
+              type="file"
+              accept="image/*"
+              onChange={async (e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                try {
+                  const d = await fileToCompressedDataUrl(f, 1200, 0.8);
+                  setForm({ ...form, image_url: d });
+                } catch {
+                  toast.error("تعذر قراءة الصورة");
+                }
+              }}
+              className="block w-full text-sm"
             />
+            {form.image_url && (
+              <div className="mt-2 flex items-center gap-3">
+                <img src={form.image_url} alt="معاينة" className="h-24 w-24 object-cover rounded-lg border border-border" />
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, image_url: "" })}
+                  className="text-sm text-destructive font-bold"
+                >
+                  إزالة الصورة
+                </button>
+              </div>
+            )}
           </Field>
           <Field label="ترتيب العرض">
             <input

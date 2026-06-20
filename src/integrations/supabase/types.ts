@@ -204,6 +204,42 @@ export type Database = {
         }
         Relationships: []
       }
+      service_options: {
+        Row: {
+          created_at: string
+          discount_percent: number
+          id: string
+          is_active: boolean
+          is_out_of_stock: boolean
+          name: string
+          note: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          is_out_of_stock?: boolean
+          name: string
+          note?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          is_active?: boolean
+          is_out_of_stock?: boolean
+          name?: string
+          note?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       service_requests: {
         Row: {
           created_at: string

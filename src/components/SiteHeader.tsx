@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SITE } from "@/lib/site-config";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV = [
   { to: "/", label: "الرئيسية" },
@@ -36,13 +37,16 @@ export function SiteHeader() {
             ))}
           </ul>
         </nav>
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="md:hidden text-2xl text-primary"
-          aria-label="القائمة"
-        >
-          ☰
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="md:hidden text-2xl text-primary"
+            aria-label="القائمة"
+          >
+            ☰
+          </button>
+        </div>
       </div>
       {open && (
         <div className="md:hidden border-t border-border bg-background">

@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      discount_codes: {
+        Row: {
+          code: string
+          created_at: string
+          discount_percent: number
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          max_uses: number | null
+          note: string | null
+          updated_at: string
+          used_count: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          discount_percent: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number | null
+          note?: string | null
+          updated_at?: string
+          used_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          discount_percent?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number | null
+          note?: string | null
+          updated_at?: string
+          used_count?: number
+        }
+        Relationships: []
+      }
       portfolio_items: {
         Row: {
           category: string | null

@@ -18,7 +18,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/admin/products" });
+      if (data.user) navigate({ to: "/admin" });
     });
   }, [navigate]);
 
@@ -30,7 +30,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/admin/products` },
+          options: { emailRedirectTo: `${window.location.origin}/admin` },
         });
         if (error) throw error;
         toast.success("تم إنشاء الحساب. يرجى تعيين صلاحية المدير من قاعدة البيانات.");
@@ -38,7 +38,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("تم تسجيل الدخول");
-        navigate({ to: "/admin/products" });
+        navigate({ to: "/admin" });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "حدث خطأ");

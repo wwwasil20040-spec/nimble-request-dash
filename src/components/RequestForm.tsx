@@ -55,7 +55,7 @@ export function RequestForm() {
       const service_type = selected?.name || null;
       const { data: inserted, error: insErr } = await supabase
         .from("service_requests")
-        .insert({ full_name, phone, details, service_type, status: "new" })
+        .insert({ full_name, phone, details, service_type, status: "new" } as never)
         .select("tracking_code")
         .maybeSingle();
       if (insErr) {

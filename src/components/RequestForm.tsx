@@ -52,6 +52,19 @@ export function RequestForm() {
         return;
       }
 
+      const service_type = selected?.name || null;
+      const { data: inserted, error: insErr } = await supabase
+        .from("service_requests")
+        .insert({ full_name, phone, details, service_type, status: "new" })
+        .select("tracking_code")
+        .maybeSingle();
+      if (insErr) {
+        console.error(insErr);
+        toast.error("تعذر حفظ الطلب: " + insErr.message);
+        setSubmitting(false);
+        return;
+      }
+
       const lines = [
         "🌟 *طلب خدمة جديد*",
         "",
@@ -63,13 +76,18 @@ export function RequestForm() {
         if (selected.discount_percent > 0) svc += ` (خصم ${selected.discount_percent}%)`;
         lines.push(svc);
       }
+      if (inserted?.tracking_code) lines.push(`🔖 *رمز التتبع:* ${inserted.tracking_code}`);
       lines.push("", "📝 *تفاصيل الطلب:*", details);
 
       const text = encodeURIComponent(lines.join("\n"));
       const waUrl = `https://wa.me/${SITE.whatsappNumber}?text=${text}`;
       window.open(waUrl, "_blank", "noopener,noreferrer");
 
-      toast.success("تم فتح واتساب — أرسل الرسالة وأرفق الملفات إن وجدت");
+      toast.success(
+        inserted?.tracking_code
+          ? `تم حفظ الطلب — رمز التتبع: ${inserted.tracking_code}`
+          : "تم حفظ الطلب"
+      );
       formRef.current?.reset();
       setSelectedId("");
     } catch (err) {

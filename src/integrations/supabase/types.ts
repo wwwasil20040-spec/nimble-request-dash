@@ -353,6 +353,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_find_user_id_by_email: { Args: { _email: string }; Returns: string }
+      admin_list_users: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string
+          id: string
+          is_admin: boolean
+        }[]
+      }
       generate_tracking_code: { Args: never; Returns: string }
       has_role: {
         Args: {

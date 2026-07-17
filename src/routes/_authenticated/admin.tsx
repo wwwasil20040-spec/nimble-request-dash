@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AdminNav } from "@/components/AdminNav";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/admin/")({
+export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "لوحة الإدارة" }] }),
   component: AdminHome,
 });
